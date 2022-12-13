@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="lmsProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="Book_Id" />
+          </Key>
+          <Property Name="Book_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Author" Type="varchar" MaxLength="50" />
+          <Property Name="Publisher" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblBorrowHistory">
+          <Key>
+            <PropertyRef Name="BorrowHistory_Id" />
+          </Key>
+          <Property Name="BorrowHistory_Id" Type="int" Nullable="false" />
+          <Property Name="BookId" Type="int" />
+          <Property Name="CustomerId" Type="int" />
+          <Property Name="BorrowDate" Type="datetime" />
+          <Property Name="ReturnDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="Customer_Id" />
+          </Key>
+          <Property Name="Customer_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="50" />
+          <Property Name="Contact" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_tblBorrowHistory_tblBook">
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="0..1" />
+          <End Role="tblBorrowHistory" Type="Self.tblBorrowHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCustomer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="tblBorrowHistory">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="lmsProjectModelStoreContainer">
+          <EntitySet Name="tblBook" EntityType="Self.tblBook" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblBorrowHistory" EntityType="Self.tblBorrowHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCustomer" EntityType="Self.tblCustomer" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblBorrowHistory_tblBook" Association="Self.FK_tblBorrowHistory_tblBook">
+            <End Role="tblCustomer" EntitySet="tblCustomer" />
+            <End Role="tblBorrowHistory" EntitySet="tblBorrowHistory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="lmsProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="Book_Id" />
+          </Key>
+          <Property Name="Book_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Publisher" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblBorrowHistory" Relationship="Self.FK_tblBorrowHistory_tblBook" FromRole="tblBook" ToRole="tblBorrowHistory" />
+        </EntityType>
+        <EntityType Name="tblBorrowHistory">
+          <Key>
+            <PropertyRef Name="BorrowHistory_Id" />
+          </Key>
+          <Property Name="BorrowHistory_Id" Type="Int32" Nullable="false" />
+          <Property Name="BookId" Type="Int32" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="BorrowDate" Type="DateTime" Precision="3" />
+          <Property Name="ReturnDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblBook" Relationship="Self.FK_tblBorrowHistory_tblBook" FromRole="tblBorrowHistory" ToRole="tblBook" />
+          <NavigationProperty Name="tblCustomer" Relationship="lmsProjectModel.FK_tblBorrowHistory_tblBook1" FromRole="tblBorrowHistory" ToRole="tblCustomer" />
+        </EntityType>
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="Customer_Id" />
+          </Key>
+          <Property Name="Customer_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblBorrowHistory" Relationship="lmsProjectModel.FK_tblBorrowHistory_tblBook1" FromRole="tblCustomer" ToRole="tblBorrowHistory" />
+        </EntityType>
+        <Association Name="FK_tblBorrowHistory_tblBook">
+          <End Role="tblBook" Type="Self.tblBook" Multiplicity="0..1" />
+          <End Role="tblBorrowHistory" Type="Self.tblBorrowHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBook">
+              <PropertyRef Name="Book_Id" />
+            </Principal>
+            <Dependent Role="tblBorrowHistory">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="lmsProjectEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblBook" EntityType="Self.tblBook" />
+          <EntitySet Name="tblBorrowHistory" EntityType="Self.tblBorrowHistory" />
+          <EntitySet Name="tblCustomer" EntityType="Self.tblCustomer" />
+          <AssociationSet Name="FK_tblBorrowHistory_tblBook" Association="Self.FK_tblBorrowHistory_tblBook">
+            <End Role="tblBook" EntitySet="tblBook" />
+            <End Role="tblBorrowHistory" EntitySet="tblBorrowHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblBorrowHistory_tblBook1" Association="lmsProjectModel.FK_tblBorrowHistory_tblBook1">
+            <End Role="tblCustomer" EntitySet="tblCustomer" />
+            <End Role="tblBorrowHistory" EntitySet="tblBorrowHistory" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_tblBorrowHistory_tblBook1">
+          <End Type="lmsProjectModel.tblCustomer" Role="tblCustomer" Multiplicity="0..1" />
+          <End Type="lmsProjectModel.tblBorrowHistory" Role="tblBorrowHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCustomer">
+              <PropertyRef Name="Customer_Id" />
+            </Principal>
+            <Dependent Role="tblBorrowHistory">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="lmsProjectModelStoreContainer" CdmEntityContainer="lmsProjectEntities">
+          <EntitySetMapping Name="tblBook">
+            <EntityTypeMapping TypeName="lmsProjectModel.tblBook">
+              <MappingFragment StoreEntitySet="tblBook">
+                <ScalarProperty Name="Book_Id" ColumnName="Book_Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Publisher" ColumnName="Publisher" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBorrowHistory">
+            <EntityTypeMapping TypeName="lmsProjectModel.tblBorrowHistory">
+              <MappingFragment StoreEntitySet="tblBorrowHistory">
+                <ScalarProperty Name="BorrowHistory_Id" ColumnName="BorrowHistory_Id" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="BorrowDate" ColumnName="BorrowDate" />
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCustomer">
+            <EntityTypeMapping TypeName="lmsProjectModel.tblCustomer">
+              <MappingFragment StoreEntitySet="tblCustomer">
+                <ScalarProperty Name="Customer_Id" ColumnName="Customer_Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

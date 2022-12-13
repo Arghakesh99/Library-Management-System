@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="lmsProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="tblBook">
+    <Key>
+      <PropertyRef Name="Book_Id" />
+    </Key>
+    <Property Name="Book_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="varchar" MaxLength="50" />
+    <Property Name="SerialNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Author" Type="varchar" MaxLength="50" />
+    <Property Name="Publisher" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblBorrowHistory">
+    <Key>
+      <PropertyRef Name="BorrowHistory_Id" />
+    </Key>
+    <Property Name="BorrowHistory_Id" Type="int" Nullable="false" />
+    <Property Name="BookId" Type="int" />
+    <Property Name="CustomerId" Type="int" />
+    <Property Name="BorrowDate" Type="datetime" />
+    <Property Name="ReturnDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblCustomer">
+    <Key>
+      <PropertyRef Name="Customer_Id" />
+    </Key>
+    <Property Name="Customer_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="50" />
+    <Property Name="Contact" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_tblBorrowHistory_tblBook">
+    <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="0..1" />
+    <End Role="tblBorrowHistory" Type="Self.tblBorrowHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblCustomer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="tblBorrowHistory">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="lmsProjectModelStoreContainer">
+    <EntitySet Name="tblBook" EntityType="Self.tblBook" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblBorrowHistory" EntityType="Self.tblBorrowHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblCustomer" EntityType="Self.tblCustomer" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_tblBorrowHistory_tblBook" Association="Self.FK_tblBorrowHistory_tblBook">
+      <End Role="tblCustomer" EntitySet="tblCustomer" />
+      <End Role="tblBorrowHistory" EntitySet="tblBorrowHistory" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

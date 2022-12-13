@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="lmsProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tblBook">
+    <Key>
+      <PropertyRef Name="Book_Id" />
+    </Key>
+    <Property Name="Book_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Publisher" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblBorrowHistory" Relationship="Self.FK_tblBorrowHistory_tblBook" FromRole="tblBook" ToRole="tblBorrowHistory" />
+  </EntityType>
+  <EntityType Name="tblBorrowHistory">
+    <Key>
+      <PropertyRef Name="BorrowHistory_Id" />
+    </Key>
+    <Property Name="BorrowHistory_Id" Type="Int32" Nullable="false" />
+    <Property Name="BookId" Type="Int32" />
+    <Property Name="CustomerId" Type="Int32" />
+    <Property Name="BorrowDate" Type="DateTime" Precision="3" />
+    <Property Name="ReturnDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="tblBook" Relationship="Self.FK_tblBorrowHistory_tblBook" FromRole="tblBorrowHistory" ToRole="tblBook" />
+    <NavigationProperty Name="tblCustomer" Relationship="lmsProjectModel.FK_tblBorrowHistory_tblBook1" FromRole="tblBorrowHistory" ToRole="tblCustomer" />
+  </EntityType>
+  <EntityType Name="tblCustomer">
+    <Key>
+      <PropertyRef Name="Customer_Id" />
+    </Key>
+    <Property Name="Customer_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblBorrowHistory" Relationship="lmsProjectModel.FK_tblBorrowHistory_tblBook1" FromRole="tblCustomer" ToRole="tblBorrowHistory" />
+  </EntityType>
+  <Association Name="FK_tblBorrowHistory_tblBook">
+    <End Role="tblBook" Type="Self.tblBook" Multiplicity="0..1" />
+    <End Role="tblBorrowHistory" Type="Self.tblBorrowHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblBook">
+        <PropertyRef Name="Book_Id" />
+      </Principal>
+      <Dependent Role="tblBorrowHistory">
+        <PropertyRef Name="BookId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="lmsProjectEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblBook" EntityType="Self.tblBook" />
+    <EntitySet Name="tblBorrowHistory" EntityType="Self.tblBorrowHistory" />
+    <EntitySet Name="tblCustomer" EntityType="Self.tblCustomer" />
+    <AssociationSet Name="FK_tblBorrowHistory_tblBook" Association="Self.FK_tblBorrowHistory_tblBook">
+      <End Role="tblBook" EntitySet="tblBook" />
+      <End Role="tblBorrowHistory" EntitySet="tblBorrowHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblBorrowHistory_tblBook1" Association="lmsProjectModel.FK_tblBorrowHistory_tblBook1">
+      <End Role="tblCustomer" EntitySet="tblCustomer" />
+      <End Role="tblBorrowHistory" EntitySet="tblBorrowHistory" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_tblBorrowHistory_tblBook1">
+    <End Type="lmsProjectModel.tblCustomer" Role="tblCustomer" Multiplicity="0..1" />
+    <End Type="lmsProjectModel.tblBorrowHistory" Role="tblBorrowHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblCustomer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="tblBorrowHistory">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
